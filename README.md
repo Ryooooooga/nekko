@@ -1,4 +1,4 @@
-# doggo
+# nekko
 
 Command-line snippet manager.
 

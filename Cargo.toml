@@ -1,8 +1,22 @@
 [package]
-name = "doggo"
+name = "nekko"
 version = "0.1.0"
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ['Ryooooooga <eial5q265e5@gmail.com>']
+description = 'Command-line snippet manager'
+license = 'MIT'
+readme = 'README.md'
+repository = 'https://github.com/Ryooooooga/nekko'
+keywords = [
+    'zsh',
+    'zsh-plugin',
+]
+edition = '2018'
 
 [dependencies]
+ansi_term = "0.12"
+dirs = "3.0"
+serde = { version = "1.0", features = ["derive"] }
+shell-escape = "0.1"
+structopt = "0.3"
+thiserror = "1.0"
+toml = "0.5"
