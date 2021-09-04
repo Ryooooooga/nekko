@@ -37,8 +37,8 @@ pub enum Subcommand {
 
 #[derive(Debug, StructOpt)]
 pub struct InitArgs {
-    #[structopt(help = "Enable default key bindings", long)]
-    pub bind_keys: bool,
+    #[structopt(help = "Key binding", long)]
+    pub bindkey: Option<String>,
 }
 
 #[derive(Debug, StructOpt)]
