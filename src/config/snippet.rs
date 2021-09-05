@@ -67,6 +67,16 @@ impl Snippets {
         Ok(snippets)
     }
 
+    pub fn load_from_dir_or_exit<P: AsRef<Path>>(dir_path: P) -> Self {
+        Self::load_from_dir(&dir_path).unwrap_or_else(|err| {
+            let path = dir_path.as_ref().to_string_lossy();
+            let error_message = format!("failed to load snippets from `{}': {}", path, err);
+
+            eprintln!("{}", error_message);
+            std::process::exit(1);
+        })
+    }
+
     pub fn merge(&mut self, other: &mut Self) {
         self.snippets.append(&mut other.snippets);
     }

@@ -1,26 +1,17 @@
 mod config;
 mod init;
+mod list;
 mod opt;
 
-use init::InitError;
 use opt::{Opt, Subcommand};
-use thiserror::Error;
 
-#[derive(Debug, Error)]
-pub enum Error {
-    #[error(transparent)]
-    InitError(#[from] InitError),
-}
-
-fn main() -> Result<(), Error> {
+fn main() {
     let opt = Opt::parse();
 
     match &opt.subcommand {
-        Subcommand::Init(args) => init::run(args)?,
-        Subcommand::List(args) => unimplemented!(),
-        Subcommand::Expand(args) => unimplemented!(),
-        Subcommand::Exec(args) => unimplemented!(),
+        Subcommand::Init(args) => init::run(args),
+        Subcommand::List(args) => list::run(args),
+        Subcommand::Expand(_args) => unimplemented!(),
+        Subcommand::Exec(_args) => unimplemented!(),
     };
-
-    Ok(())
 }

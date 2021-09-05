@@ -1,4 +1,6 @@
-mod snippet;
+pub mod snippet;
+
+pub use snippet::*;
 
 use std::env::var_os;
 use std::path::PathBuf;
