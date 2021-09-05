@@ -1,6 +1,0 @@
-[[snippets]]
-description = "Description A"
-command = "echo Command A"
-
-[[snippets]]
-command = "echo Command B"

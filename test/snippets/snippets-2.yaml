@@ -1,0 +1,7 @@
+snippets:
+  - command: echo Command C
+
+  - description: Description D
+    command: echo Command D
+
+  - command: echo Command E

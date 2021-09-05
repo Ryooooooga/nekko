@@ -1,10 +1,10 @@
 use serde::Deserialize;
+use serde_yaml;
 use std::ffi::OsStr;
 use std::fs;
 use std::io;
 use std::path::Path;
 use thiserror::Error;
-use toml;
 
 #[derive(Debug, Error)]
 pub enum SnippetError {
@@ -12,7 +12,7 @@ pub enum SnippetError {
     IoError(#[from] io::Error),
 
     #[error(transparent)]
-    DeseriazationError(#[from] toml::de::Error),
+    DeseriazationError(#[from] serde_yaml::Error),
 }
 
 #[derive(Debug, Deserialize)]
@@ -31,16 +31,18 @@ impl Snippets {
         Self { snippets: vec![] }
     }
 
+    #[allow(unused)]
     pub fn load_from_str<S: AsRef<str>>(content: S) -> Result<Self, SnippetError> {
-        let snippets = toml::from_str(content.as_ref())?;
+        let snippets = serde_yaml::from_str(content.as_ref())?;
 
         Ok(snippets)
     }
 
     pub fn load_from_file<P: AsRef<Path>>(path: P) -> Result<Self, SnippetError> {
-        let content = fs::read_to_string(path)?;
+        let file = fs::File::open(path)?;
+        let snippets = serde_yaml::from_reader(file)?;
 
-        Self::load_from_str(&content)
+        Ok(snippets)
     }
 
     pub fn load_from_dir<P: AsRef<Path>>(dir_path: P) -> Result<Self, SnippetError> {
@@ -49,8 +51,13 @@ impl Snippets {
         for entry in fs::read_dir(dir_path)? {
             let entry = entry?;
             let path = entry.path();
+            let ext = path.extension();
 
-            if path.extension() == Some(OsStr::new("toml")) && !entry.file_type()?.is_dir() {
+            let maybe_yaml = ext
+                .map(|ext| ext == OsStr::new("yaml") || ext == OsStr::new("yml"))
+                .unwrap_or(false);
+
+            if maybe_yaml && !entry.file_type()?.is_dir() {
                 let mut s = Self::load_from_file(path)?;
 
                 snippets.merge(&mut s);
@@ -73,12 +80,11 @@ mod tests {
     fn test_load_from_str() {
         let snippets = Snippets::load_from_str(
             r#"
-            [[snippets]]
-            description = "Description A"
-            command = "echo Command A"
+            snippets:
+            - description: Description A
+              command: echo Command A
 
-            [[snippets]]
-            command = "echo Command B"
+            - command: echo Command B
             "#,
         )
         .unwrap();
@@ -112,21 +118,20 @@ mod tests {
     fn test_merge() {
         let mut snippets_1 = Snippets::load_from_str(
             r#"
-            [[snippets]]
-            description = "Description A"
-            command = "echo Command A"
+            snippets:
+            - description: Description A
+              command: echo Command A
 
-            [[snippets]]
-            command = "echo Command B"
+            - command: echo Command B
         "#,
         )
         .unwrap();
 
         let mut snippets_2 = Snippets::load_from_str(
             r#"
-            [[snippets]]
-            description = "Description C"
-            command = "echo Command C"
+            snippets:
+            - description: Description C
+              command: echo Command C
         "#,
         )
         .unwrap();

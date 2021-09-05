@@ -1,0 +1,5 @@
+snippets:
+  - description: Description A
+    command: echo Command A
+
+  - command: echo Command B
