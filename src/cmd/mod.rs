@@ -18,10 +18,10 @@ pub enum Error {
     FromUtf8Error(#[from] FromUtf8Error),
 }
 
-pub fn find_snippet<'a, S: AsRef<str>>(
-    snippets: &'a Snippets,
+pub fn find_snippet<S: AsRef<str>>(
+    snippets: &'_ Snippets,
     query: Option<S>,
-) -> Result<Option<&'a str>, Error> {
+) -> Result<Option<&'_ str>, Error> {
     let mut cmd = Command::new(FUZZY_FINDER_CMD);
 
     cmd.stdin(Stdio::piped())
@@ -43,7 +43,7 @@ pub fn find_snippet<'a, S: AsRef<str>>(
 
     if exit_status.success() {
         let line = stdout.trim_end();
-        let command = line_map.get(line).map(|s| *s);
+        let command = line_map.get(line).copied();
 
         Ok(command)
     } else {
@@ -57,15 +57,24 @@ fn write_snippets<'a, W: io::Write>(
     line_map: &mut HashMap<String, &'a str>,
 ) -> io::Result<()> {
     for snippet in &snippets.snippets {
-        let description = format!("[{}]", snippet.description.as_deref().unwrap_or(""));
+        let description = snippet.description.as_ref().map(|d| format!("[{}]", d));
         let command = &snippet.command;
 
         let description_style = Color::Blue.normal();
 
-        writeln!(w, "{} {}", description_style.paint(&description), command)?;
+        match description {
+            Some(description) => {
+                writeln!(w, "{} {}", description_style.paint(&description), command)?;
 
-        let line = format!("{} {}", description, command);
-        line_map.insert(line.trim_end().to_string(), command);
+                let line = format!("{} {}", description, command);
+                line_map.insert(line.trim_end().to_string(), command);
+            }
+            None => {
+                writeln!(w, "{}", command)?;
+
+                line_map.insert(command.trim_end().to_string(), command);
+            }
+        }
     }
 
     Ok(())

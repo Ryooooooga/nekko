@@ -1,6 +1,7 @@
 use crate::cmd::find_snippet;
 use crate::config::{default_snippets_dir, Snippets};
 use crate::opt::ExpandArgs;
+use std::process;
 
 #[derive(Debug)]
 struct ExpandResult<'a> {
@@ -12,6 +13,8 @@ pub fn run(args: &ExpandArgs) {
 
     if let Some(result) = expand(args, &snippets) {
         println!("{}", result.command);
+    } else {
+        process::exit(1);
     }
 }
 
