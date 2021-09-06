@@ -30,9 +30,6 @@ pub enum Subcommand {
 
     #[structopt(about = "Expand the snippet")]
     Expand(ExpandArgs),
-
-    #[structopt(about = "Execute the snippet")]
-    Exec(ExecArgs),
 }
 
 #[derive(Debug, StructOpt)]
@@ -46,12 +43,6 @@ pub struct ListArgs {}
 
 #[derive(Debug, StructOpt)]
 pub struct ExpandArgs {
-    #[structopt(help = "Initial value for query", long, short = "q")]
-    pub query: Option<String>,
-}
-
-#[derive(Debug, StructOpt)]
-pub struct ExecArgs {
     #[structopt(help = "Initial value for query", long, short = "q")]
     pub query: Option<String>,
 }

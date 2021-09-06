@@ -1,4 +1,6 @@
+mod cmd;
 mod config;
+mod expand;
 mod init;
 mod list;
 mod opt;
@@ -11,7 +13,6 @@ fn main() {
     match &opt.subcommand {
         Subcommand::Init(args) => init::run(args),
         Subcommand::List(args) => list::run(args),
-        Subcommand::Expand(_args) => unimplemented!(),
-        Subcommand::Exec(_args) => unimplemented!(),
+        Subcommand::Expand(args) => expand::run(args),
     };
 }
