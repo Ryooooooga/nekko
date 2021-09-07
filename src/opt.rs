@@ -28,8 +28,8 @@ pub enum Subcommand {
     #[structopt(about = "List snippets")]
     List(ListArgs),
 
-    #[structopt(about = "Expand the snippet")]
-    Expand(ExpandArgs),
+    #[structopt(about = "Search snippets")]
+    Search(SearchArgs),
 }
 
 #[derive(Debug, StructOpt)]
@@ -42,7 +42,7 @@ pub struct InitArgs {
 pub struct ListArgs {}
 
 #[derive(Debug, StructOpt)]
-pub struct ExpandArgs {
+pub struct SearchArgs {
     #[structopt(help = "Initial value for query", long, short = "q")]
     pub query: Option<String>,
 }

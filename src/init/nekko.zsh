@@ -1,5 +1,5 @@
-zle -N __nekko::expand
+zle -N __nekko::search
 
-__nekko::expand() {
-    LBUFFER="$(nekko expand --query="$LBUFFER")"
+__nekko::search() {
+    LBUFFER="$(nekko search --query="$LBUFFER")"
 }

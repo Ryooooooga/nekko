@@ -1,5 +1,7 @@
 pub mod fzf;
 
+pub use fzf::Fzf;
+
 use std::io;
 use std::process::ExitStatus;
 use thiserror::Error;

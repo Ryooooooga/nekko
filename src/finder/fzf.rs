@@ -34,7 +34,7 @@ fn exec_command(program: &str, args: &[&str], input: &str) -> Result<FinderOutpu
         .stderr(Stdio::inherit());
 
     let mut process = cmd.spawn()?;
-    process.stdin.take().unwrap().write(input.as_bytes())?;
+    process.stdin.take().unwrap().write_all(input.as_bytes())?;
 
     let exit_status = process.wait()?;
 

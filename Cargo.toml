@@ -1,6 +1,6 @@
 [package]
 name = "nekko"
-version = "0.1.1"
+version = "0.1.2"
 authors = ['Ryooooooga <eial5q265e5@gmail.com>']
 description = 'Command-line snippet manager'
 license = 'MIT'
