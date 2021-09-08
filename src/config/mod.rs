@@ -1,5 +1,7 @@
+pub mod placeholder;
 pub mod snippet;
 
+pub use placeholder::*;
 pub use snippet::*;
 
 use std::env::var_os;

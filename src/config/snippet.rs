@@ -1,5 +1,7 @@
+use super::Placeholder;
 use serde::Deserialize;
 use serde_yaml;
+use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs;
 use std::io;
@@ -24,6 +26,7 @@ pub struct Snippets {
 pub struct Snippet {
     pub description: Option<String>,
     pub command: String,
+    pub placeholders: Option<HashMap<String, Placeholder>>,
 }
 
 impl Snippets {

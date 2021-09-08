@@ -85,11 +85,13 @@ fn test_format_snippet() {
     let s1 = Snippet {
         description: None,
         command: "echo hello".to_string(),
+        placeholders: None,
     };
 
     let s2 = Snippet {
         description: Some("world".to_string()),
         command: "echo world".to_string(),
+        placeholders: None,
     };
 
     assert_eq!(format_snippet(&s1, false), "echo hello");
